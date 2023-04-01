@@ -54,13 +54,13 @@ func (v *getProductsProductsProductPaginatePagination) GetOffset() int { return 
 
 // getProductsProductsProductPaginateProductsProduct includes the requested fields of the GraphQL type Product.
 type getProductsProductsProductPaginateProductsProduct struct {
-	Id                         string                                                                                                 `json:"id"`
+	Id                         int64                                                                                                  `json:"id"`
 	Code                       string                                                                                                 `json:"code"`
 	ProductSpecificationValues []getProductsProductsProductPaginateProductsProductProductSpecificationValuesProductSpecificationValue `json:"productSpecificationValues"`
 }
 
 // GetId returns getProductsProductsProductPaginateProductsProduct.Id, and is useful for accessing the field via an interface.
-func (v *getProductsProductsProductPaginateProductsProduct) GetId() string { return v.Id }
+func (v *getProductsProductsProductPaginateProductsProduct) GetId() int64 { return v.Id }
 
 // GetCode returns getProductsProductsProductPaginateProductsProduct.Code, and is useful for accessing the field via an interface.
 func (v *getProductsProductsProductPaginateProductsProduct) GetCode() string { return v.Code }

@@ -5,6 +5,5 @@ operations:
 - ./graph/genqlient.graphql
 generated: ./graph/resolvers.go
 bindings:
-  ID: int64
-  marshaler:
-  unmarshaler:
+  ID:
+    type: int64
