@@ -1,0 +1,27 @@
+type Pagination {
+    limit: Int
+    offset: Int
+    totals: Int
+}
+
+input PaginationInput {
+    limit: Int!
+    offset: Int!
+}
+
+type ProductPaginate {
+    pagination: Pagination
+    products: [Product]
+}
+
+type Query {
+    user(ID: ID!): User
+    users: [User]
+    taxRates: [TaxRate]
+    legalEntityTypes: [LegalEntityType]
+    productsItemsByCode( code: String! ): ProductItem
+    productItems( input: [ProductSpecificationInput]! ): [ProductItem]
+    products( pagination: PaginationInput ): ProductPaginate
+    currency( id: ID! ): Currency
+    currencies: [Currency]
+}

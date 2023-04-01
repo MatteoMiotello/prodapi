@@ -1,0 +1,10 @@
+# Default genqlient config; for full documentation see:
+# https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
+schema: ./graph/schema/*.graphql
+operations:
+- ./graph/genqlient.graphql
+generated: ./graph/resolvers.go
+bindings:
+  ID: int64
+  marshaler:
+  unmarshaler:

@@ -1,0 +1,7 @@
+type Currency {
+    id: ID!
+    iso_code: String!
+    symbol: String!
+    tag: String!
+    name: String!
+}

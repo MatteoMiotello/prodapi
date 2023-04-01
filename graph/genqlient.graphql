@@ -1,0 +1,19 @@
+query getProducts( $limit: Int! $offset: Int! ){
+    products(pagination: { limit: $limit, offset: $offset }) {
+        pagination {
+            limit
+            totals
+            offset
+        }
+        products {
+            id
+            code
+            productSpecificationValues {
+                specification {
+                    code
+                }
+                value
+            }
+        }
+    }
+}

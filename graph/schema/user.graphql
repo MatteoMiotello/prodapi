@@ -1,0 +1,62 @@
+type LegalEntityType {
+    id: ID!
+    name: String!
+}
+
+type TaxRate {
+    id: ID!
+    markupPercentage: Float!
+    name: String!
+}
+
+type UserRole {
+    id: ID!
+    roleCode: String!
+    name: String!
+    isAdmin: Boolean
+}
+
+type UserBilling {
+    id: ID!
+    legalEntityType: LegalEntityType!
+    taxRate: TaxRate!
+    name: String!
+    surname: String!
+    fiscalCode: String!
+    vatNumber: String!
+    addressLine1: String!
+    addressLine2: String
+    city: String!
+    province: String
+    cap: String!
+    country: String!
+    user: User!
+}
+
+type User {
+    id: ID!
+    email: String!
+    username: String
+    userRole: UserRole!
+    userBilling: UserBilling!
+}
+
+input CreateUserBilling {
+    userId: ID
+    legalEntityTypeId: ID!
+    name: String!
+    surname: String!
+    fiscalCode: String!
+    vatNumber: String!
+    addressLine1: String!
+    addressLine2: String
+    city: String!
+    province: String
+    cap: String!
+    country: String!
+}
+
+
+type Mutation {
+    createUserBilling( input: CreateUserBilling ): UserBilling!
+}

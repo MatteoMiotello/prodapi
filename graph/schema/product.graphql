@@ -1,0 +1,45 @@
+type ProductCategory {
+    id: ID!
+    code: String!
+    name: String!
+    specifications: [ProductSpecification]!
+}
+
+type Brand {
+    id: ID!
+    name: String!
+    image_logo: String!
+}
+
+type Product {
+    id: ID!
+    code: String!
+    brandID: ID!
+    brand: Brand!
+    productCategoryID: ID!
+    category: ProductCategory!
+    productSpecificationValues: [ProductSpecificationValue]!
+}
+
+type ProductPrice {
+    id: ID!
+    value: Float!
+    currency: Currency!
+}
+
+type Supplier {
+    id: ID!
+    name: String!
+    code: String!
+}
+
+type ProductItem {
+    id: ID!
+    productID: ID!
+    product: Product!
+    price: [ProductPrice]!
+    supplierID: ID!
+    supplier: Supplier!
+    supplier_price: Float!
+    supplier_quantity: Int!
+}
