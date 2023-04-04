@@ -4,11 +4,16 @@ go 1.19
 
 require (
 	github.com/Khan/genqlient v0.5.0
+	github.com/dgryski/trifles v0.0.0-20200323201526-dd97f9abfb48
+	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/viper v1.15.0
 	go.mongodb.org/mongo-driver v1.11.3
 )
 
 require (
+	github.com/agnivade/levenshtein v1.1.1 // indirect
+	github.com/alexflint/go-arg v1.4.2 // indirect
+	github.com/alexflint/go-scalar v1.0.0 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect

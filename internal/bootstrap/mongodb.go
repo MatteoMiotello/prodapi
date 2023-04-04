@@ -3,6 +3,7 @@ package bootstrap
 import (
 	"context"
 	"fmt"
+	"github.com/MatteoMiotello/prodapi/internal/nosql"
 	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -24,11 +25,6 @@ func InitMongoDb() {
 	if err != nil {
 		panic(err)
 	}
-	defer func() {
-		if err = client.Disconnect(context.TODO()); err != nil {
-			panic(err)
-		}
-	}()
 
 	var result bson.M
 	if err := client.
@@ -37,6 +33,8 @@ func InitMongoDb() {
 		Decode(&result); err != nil {
 		panic(err)
 	}
+
+	nosql.InitClient(client)
 
 	fmt.Println("Mongodb online")
 }

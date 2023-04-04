@@ -56,6 +56,7 @@ func (v *getProductsProductsProductPaginatePagination) GetOffset() int { return 
 type getProductsProductsProductPaginateProductsProduct struct {
 	Id                         int64                                                                                                  `json:"id"`
 	Code                       string                                                                                                 `json:"code"`
+	Brand                      getProductsProductsProductPaginateProductsProductBrand                                                 `json:"brand"`
 	ProductSpecificationValues []getProductsProductsProductPaginateProductsProductProductSpecificationValuesProductSpecificationValue `json:"productSpecificationValues"`
 }
 
@@ -65,10 +66,23 @@ func (v *getProductsProductsProductPaginateProductsProduct) GetId() int64 { retu
 // GetCode returns getProductsProductsProductPaginateProductsProduct.Code, and is useful for accessing the field via an interface.
 func (v *getProductsProductsProductPaginateProductsProduct) GetCode() string { return v.Code }
 
+// GetBrand returns getProductsProductsProductPaginateProductsProduct.Brand, and is useful for accessing the field via an interface.
+func (v *getProductsProductsProductPaginateProductsProduct) GetBrand() getProductsProductsProductPaginateProductsProductBrand {
+	return v.Brand
+}
+
 // GetProductSpecificationValues returns getProductsProductsProductPaginateProductsProduct.ProductSpecificationValues, and is useful for accessing the field via an interface.
 func (v *getProductsProductsProductPaginateProductsProduct) GetProductSpecificationValues() []getProductsProductsProductPaginateProductsProductProductSpecificationValuesProductSpecificationValue {
 	return v.ProductSpecificationValues
 }
+
+// getProductsProductsProductPaginateProductsProductBrand includes the requested fields of the GraphQL type Brand.
+type getProductsProductsProductPaginateProductsProductBrand struct {
+	Name string `json:"name"`
+}
+
+// GetName returns getProductsProductsProductPaginateProductsProductBrand.Name, and is useful for accessing the field via an interface.
+func (v *getProductsProductsProductPaginateProductsProductBrand) GetName() string { return v.Name }
 
 // getProductsProductsProductPaginateProductsProductProductSpecificationValuesProductSpecificationValue includes the requested fields of the GraphQL type ProductSpecificationValue.
 type getProductsProductsProductPaginateProductsProductProductSpecificationValuesProductSpecificationValue struct {
@@ -123,6 +137,9 @@ query getProducts ($limit: Int!, $offset: Int!) {
 		products {
 			id
 			code
+			brand {
+				name
+			}
 			productSpecificationValues {
 				specification {
 					code

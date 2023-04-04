@@ -8,6 +8,9 @@ query getProducts( $limit: Int! $offset: Int! ){
         products {
             id
             code
+            brand {
+                name
+            }
             productSpecificationValues {
                 specification {
                     code

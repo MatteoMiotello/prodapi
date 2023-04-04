@@ -1,10 +1,9 @@
 package main
 
 import (
-	"context"
 	"fmt"
-	"github.com/MatteoMiotello/prodapi/graph"
 	"github.com/MatteoMiotello/prodapi/internal/bootstrap"
+	"github.com/MatteoMiotello/prodapi/internal/clients"
 )
 
 func init() {
@@ -13,12 +12,13 @@ func init() {
 }
 
 func main() {
-	ctx := context.Background()
-	products, err := graph.GetProducts(ctx, 10, 0)
+	bClient := clients.NewBingClient()
+
+	res, err := bClient.SearchTyreImage("265/45 R20 TL 108Y AZ-850 XL")
+
+	fmt.Println(res.Value[0].ThumbnailUrl)
 
 	if err != nil {
 		panic(err)
 	}
-
-	fmt.Println(products)
 }
