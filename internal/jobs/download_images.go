@@ -9,6 +9,7 @@ import (
 	"github.com/MatteoMiotello/prodapi/schemas"
 	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/bson"
+	"io"
 	"mime"
 	"net/http"
 	"os"
@@ -20,43 +21,39 @@ func DownloadNextImage() {
 	filter := bson.D{{"image_url", bson.D{{"$exists", false}}}}
 
 	var tyre schemas.Tyre
-	nosql.TyreCollection().FindOne(ctx, filter).Decode(&tyre)
+	err := nosql.TyreCollection().FindOne(ctx, filter).Decode(&tyre)
+	if err != nil {
+		panic(err)
+	}
 
 	bClient := clients.NewBingClient()
+
+	fmt.Println(tyre.Reference)
 
 	res, err := bClient.SearchTyreImage(tyre.Reference)
 
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
+	}
+
+	if len(res.Value) == 0 {
+		fmt.Println("no image found")
+		return
 	}
 
 	imageUrl := res.Value[0].ThumbnailUrl
-
-	tyre.ImageUrl = imageUrl
-
-	update := bson.M{
-		"$set": tyre,
-	}
-
-	_, err = nosql.TyreCollection().UpdateByID(ctx, tyre.ID, update)
-
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println(tyre.ID)
-
-	return
 
 	response, err := http.Get(imageUrl)
 	if err != nil {
 		panic(err)
 	}
 
-	_, err = os.ReadDir("./images")
+	fsHandler := fs_handlers.NewImagesHandler(viper.GetString("APPLICATION_URL"))
+	_, err = os.ReadDir(fsHandler.GetRelativePath())
 
 	if err != nil {
-		err := os.Mkdir("./images", os.ModePerm)
+		err := os.Mkdir(fsHandler.GetRelativePath(), os.ModePerm)
 		if err != nil {
 			panic(err)
 		}
@@ -67,7 +64,7 @@ func DownloadNextImage() {
 	byType, err := mime.ExtensionsByType(contentType)
 
 	filename := tyre.Code + byType[1]
-	filePath := "./images/" + filename
+	filePath := fsHandler.GetFileRelativePath(filename)
 
 	if err != nil {
 		panic(err)
@@ -75,25 +72,32 @@ func DownloadNextImage() {
 
 	file, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY, os.ModePerm)
 
-	err = response.Write(file)
+	_, err = io.Copy(file, response.Body)
+	if err != nil {
+		return
+	}
 
 	if err != nil {
 		panic(err)
 	}
 
-	file.Close()
+	err = file.Close()
+	if err != nil {
+		return
+	}
 
-	fsHandler := fs_handlers.NewImagesHandler(viper.GetString("APPLICATION_URL"))
 	url := fsHandler.GetPublicUrl(filename)
 
 	tyre.ImageUrl = url
 
 	fmt.Println(tyre)
+	update := bson.M{
+		"$set": tyre,
+	}
 
-	_, err = nosql.TyreCollection().UpdateByID(ctx, tyre.ID, tyre)
+	_, err = nosql.TyreCollection().UpdateByID(ctx, tyre.ID, update)
+
 	if err != nil {
 		panic(err)
 	}
-
-	fmt.Println(tyre.Code)
 }

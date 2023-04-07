@@ -10,7 +10,7 @@ type ImagesHandler struct {
 func NewImagesHandler(baseUrl string) *ImagesHandler {
 	return &ImagesHandler{
 		baseUrl:  baseUrl,
-		basePath: "images",
+		basePath: "images/tyres",
 	}
 }
 
@@ -26,6 +26,14 @@ func concat(paths ...string) string {
 	}
 
 	return strings.Join(cleaned, "/")
+}
+
+func (i ImagesHandler) GetRelativePath() string {
+	return concat("./", i.basePath)
+}
+
+func (i ImagesHandler) GetFileRelativePath(fileName string) string {
+	return concat(i.GetRelativePath(), fileName)
 }
 
 func (i ImagesHandler) GetBaseUrl() string {

@@ -103,6 +103,7 @@ func (b BingImageClient) SearchTyreImage(searchString string) (*ImageResponse, e
 		"safeSearch": "Strict",
 		"aspect":     "Tall",
 		"size":       "Large",
+		"minWidth":   "400",
 	}
 
 	tyreRes := new(ImageResponse)
