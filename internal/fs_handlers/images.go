@@ -3,14 +3,16 @@ package fs_handlers
 import "strings"
 
 type ImagesHandler struct {
-	baseUrl  string
-	basePath string
+	baseUrl   string
+	basePath  string
+	publicUrl string
 }
 
 func NewImagesHandler(baseUrl string) *ImagesHandler {
 	return &ImagesHandler{
-		baseUrl:  baseUrl,
-		basePath: "images/tyres",
+		baseUrl:   baseUrl,
+		basePath:  "images/tyres",
+		publicUrl: "resources/tyres",
 	}
 }
 
@@ -36,8 +38,12 @@ func (i ImagesHandler) GetFileRelativePath(fileName string) string {
 	return concat(i.GetRelativePath(), fileName)
 }
 
+func (i ImagesHandler) GetFileBaseRelativePath(fileName string) string {
+	return concat("/", i.basePath, fileName)
+}
+
 func (i ImagesHandler) GetBaseUrl() string {
-	return concat(i.baseUrl, i.basePath)
+	return concat(i.baseUrl, i.publicUrl)
 }
 
 func (i ImagesHandler) GetPublicUrl(filename string) string {

@@ -2,14 +2,11 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/MatteoMiotello/prodapi/internal/bootstrap"
-	"github.com/MatteoMiotello/prodapi/internal/nosql"
-	"github.com/MatteoMiotello/prodapi/schemas"
+	"github.com/MatteoMiotello/prodapi/internal/controllers"
 	"github.com/gorilla/mux"
 	"github.com/spf13/viper"
-	"go.mongodb.org/mongo-driver/bson"
 	"net"
 	"net/http"
 )
@@ -24,41 +21,19 @@ func main() {
 	router := mux.NewRouter()
 
 	fs := http.FileServer(http.Dir("./images/tyres"))
-	router.Handle("/resources/tyres/", http.StripPrefix("/resources/tyres/", fs))
+	router.Handle("/resources/tyres/", http.StripPrefix("/resources/tyres/", fs)).Methods(http.MethodGet)
 
-	router.HandleFunc("/products/tyres/{tyre_code}", func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		productCode, ok := vars["tyre_code"]
+	router.HandleFunc("/products/tyres/{tyre_code}", controllers.NewTyreController().FindByCode).Methods(http.MethodGet)
 
-		if !ok {
-			http.NotFound(w, r)
-			return
-		}
+	fmt.Println("server started at " + viper.GetString(viper.GetString("APPLICATION_DOMAIN")))
 
-		filter := bson.D{{
-			"code", bson.D{{
-				"$eq", productCode,
-			}},
-		}}
+	_ = router.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
+		methods, _ := route.GetMethods()
+		template, _ := route.GetPathTemplate()
+		fmt.Println(methods, template)
 
-		var tyre schemas.Tyre
-
-		found := nosql.TyreCollection().FindOne(r.Context(), filter)
-
-		err := found.Decode(&tyre)
-		if err != nil {
-			http.Error(w, "could not decode record: "+err.Error(), http.StatusBadRequest)
-			return
-		}
-
-		err = json.NewEncoder(w).Encode(tyre)
-		if err != nil {
-			http.Error(w, "Failed to encode tyre: "+err.Error(), http.StatusInternalServerError)
-			return
-		}
+		return nil
 	})
-
-	fmt.Println("server started at port 8080")
 
 	server := http.Server{
 		Addr:    viper.GetString("APPLICATION_DOMAIN"),

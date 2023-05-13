@@ -18,7 +18,7 @@ import (
 func DownloadNextImage() {
 	ctx := context.Background()
 
-	filter := bson.D{{"image_url", bson.D{{"$exists", false}}}}
+	filter := bson.D{{"image_path", bson.D{{"$exists", false}}}}
 
 	var tyre schemas.Tyre
 	err := nosql.TyreCollection().FindOne(ctx, filter).Decode(&tyre)
@@ -49,6 +49,8 @@ func DownloadNextImage() {
 		panic(err)
 	}
 
+	fmt.Println(imageUrl)
+
 	fsHandler := fs_handlers.NewImagesHandler(viper.GetString("APPLICATION_URL"))
 	_, err = os.ReadDir(fsHandler.GetRelativePath())
 
@@ -60,10 +62,9 @@ func DownloadNextImage() {
 	}
 
 	contentType := response.Header.Get("Content-Type")
+	extensionsByType, err := mime.ExtensionsByType(contentType)
 
-	byType, err := mime.ExtensionsByType(contentType)
-
-	filename := tyre.Code + byType[1]
+	filename := tyre.Code + extensionsByType[1]
 	filePath := fsHandler.GetFileRelativePath(filename)
 
 	if err != nil {
@@ -86,9 +87,8 @@ func DownloadNextImage() {
 		return
 	}
 
-	url := fsHandler.GetPublicUrl(filename)
-
-	tyre.ImageUrl = url
+	tyre.ImagePath = fsHandler.GetFileBaseRelativePath(filename)
+	tyre.ImageExtension = extensionsByType[1]
 
 	fmt.Println(tyre)
 	update := bson.M{

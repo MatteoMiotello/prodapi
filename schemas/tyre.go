@@ -21,5 +21,6 @@ type Tyre struct {
 	LoadVersion               string             `bson:"load_version,omitempty"`
 	FuelEfficiency            string             `bson:"fuel_efficiency,omitempty"`
 	WetGripClass              string             `bson:"wet_grip_class,omitempty"`
-	ImageUrl                  string             `bson:"image_url,omitempty"`
+	ImagePath                 string             `bson:"image_path,omitempty"`
+	ImageExtension            string             `bson:"image_extension,omitempty"`
 }
