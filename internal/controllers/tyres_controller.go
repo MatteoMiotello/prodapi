@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"context"
 	"encoding/json"
+	"errors"
 	"github.com/MatteoMiotello/prodapi/internal/fs_handlers"
 	"github.com/MatteoMiotello/prodapi/internal/nosql"
 	"github.com/MatteoMiotello/prodapi/schemas"
@@ -18,6 +20,25 @@ func NewTyreController() *tyreController {
 	return &tyreController{}
 }
 
+func (receiver *tyreController) findTyreByProductCode(ctx context.Context, productCode string) (error, *schemas.Tyre) {
+	filter := bson.D{{
+		"code", bson.D{{
+			"$eq", productCode,
+		}},
+	}}
+
+	var tyre schemas.Tyre
+
+	found := nosql.TyreCollection().FindOne(ctx, filter)
+
+	err := found.Decode(&tyre)
+	if err != nil {
+		return errors.New("could not decode record: " + err.Error()), nil
+	}
+
+	return nil, &tyre
+}
+
 func (receiver *tyreController) FindByCode(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	productCode, ok := vars["tyre_code"]
@@ -27,17 +48,8 @@ func (receiver *tyreController) FindByCode(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	filter := bson.D{{
-		"code", bson.D{{
-			"$eq", productCode,
-		}},
-	}}
+	err, tyre := receiver.findTyreByProductCode(r.Context(), productCode)
 
-	var tyre schemas.Tyre
-
-	found := nosql.TyreCollection().FindOne(r.Context(), filter)
-
-	err := found.Decode(&tyre)
 	if err != nil {
 		http.Error(w, "could not decode record: "+err.Error(), http.StatusBadRequest)
 		return
@@ -54,4 +66,26 @@ func (receiver *tyreController) FindByCode(w http.ResponseWriter, r *http.Reques
 		http.Error(w, "Failed to encode tyre: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
+}
+
+func (receiver *tyreController) FindImage(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	productCode, ok := vars["tyre_code"]
+
+	if !ok {
+		http.NotFound(w, r)
+		return
+	}
+
+	err, tyre := receiver.findTyreByProductCode(r.Context(), productCode)
+
+	if err != nil {
+		http.Error(w, "could not decode record: "+err.Error(), http.StatusNotFound)
+		return
+	}
+
+	filePath := tyre.ImagePath
+	filePath = "." + filePath
+
+	http.ServeFile(w, r, filePath)
 }

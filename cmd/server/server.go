@@ -20,9 +20,7 @@ func main() {
 	ctx := context.Background()
 	router := mux.NewRouter()
 
-	fs := http.FileServer(http.Dir("./images/tyres"))
-	router.Handle("/resources/tyres/", http.StripPrefix("/resources/tyres/", fs)).Methods(http.MethodGet)
-
+	router.HandleFunc("/products/tyres_image/{tyre_code}", controllers.NewTyreController().FindImage).Methods(http.MethodGet)
 	router.HandleFunc("/products/tyres/{tyre_code}", controllers.NewTyreController().FindByCode).Methods(http.MethodGet)
 
 	fmt.Println("server started at " + viper.GetString(viper.GetString("APPLICATION_DOMAIN")))
