@@ -18,6 +18,12 @@ func Disconnect() {
 	}
 }
 
+var dbName = viper.GetString("MONGO_DB_NAME")
+
 func TyreCollection() *mongo.Collection {
-	return Client.Database(viper.GetString("MONGO_DB_NAME")).Collection("tyres")
+	return Client.Database(dbName).Collection("tyres")
+}
+
+func BrandCollection() *mongo.Collection {
+	return Client.Database(viper.GetString("MONGO_DB_NAME")).Collection("brands")
 }

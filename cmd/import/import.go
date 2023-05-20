@@ -15,7 +15,6 @@ func init() {
 }
 
 func main() {
-
 	defer nosql.Disconnect()
 	var offset int = 0
 	var totals int = 1

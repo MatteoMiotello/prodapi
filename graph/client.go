@@ -15,3 +15,6 @@ func getClient() graphql.Client {
 func GetProducts(ctx context.Context, limit int, offset int) (*getProductsResponse, error) {
 	return getProducts(ctx, getClient(), limit, offset)
 }
+func GetBrands(ctx context.Context) (*getBrandsResponse, error) {
+	return getBrands(ctx, getClient())
+}

@@ -5,17 +5,14 @@ import (
 	"fmt"
 	"github.com/MatteoMiotello/prodapi/internal/clients"
 	"github.com/MatteoMiotello/prodapi/internal/fs_handlers"
+	"github.com/MatteoMiotello/prodapi/internal/images"
 	"github.com/MatteoMiotello/prodapi/internal/nosql"
 	"github.com/MatteoMiotello/prodapi/schemas"
 	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/bson"
-	"io"
-	"mime"
-	"net/http"
-	"os"
 )
 
-func DownloadNextImage() {
+func DownloadNextTyreImage() {
 	ctx := context.Background()
 
 	filter := bson.D{{"image_path", bson.D{{"$exists", false}}}}
@@ -43,52 +40,15 @@ func DownloadNextImage() {
 	}
 
 	imageUrl := res.Value[0].ThumbnailUrl
+	iService := images.NewImageService(fs_handlers.NewImagesHandler(viper.GetString("APPLICATION_URL")))
 
-	response, err := http.Get(imageUrl)
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println(imageUrl)
-
-	fsHandler := fs_handlers.NewImagesHandler(viper.GetString("APPLICATION_URL"))
-	_, err = os.ReadDir(fsHandler.GetRelativePath())
-
-	if err != nil {
-		err := os.Mkdir(fsHandler.GetRelativePath(), os.ModePerm)
-		if err != nil {
-			panic(err)
-		}
-	}
-
-	contentType := response.Header.Get("Content-Type")
-	extensionsByType, err := mime.ExtensionsByType(contentType)
-
-	filename := tyre.Code + extensionsByType[1]
-	filePath := fsHandler.GetFileRelativePath(filename)
-
-	if err != nil {
-		panic(err)
-	}
-
-	file, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY, os.ModePerm)
-
-	_, err = io.Copy(file, response.Body)
+	image, err := iService.SaveImageFromUrl(imageUrl, tyre.Code)
 	if err != nil {
 		return
 	}
 
-	if err != nil {
-		panic(err)
-	}
-
-	err = file.Close()
-	if err != nil {
-		return
-	}
-
-	tyre.ImagePath = fsHandler.GetFileBaseRelativePath(filename)
-	tyre.ImageExtension = extensionsByType[1]
+	tyre.ImagePath = image.Path
+	tyre.ImageExtension = image.Extension
 
 	fmt.Println(tyre)
 	update := bson.M{

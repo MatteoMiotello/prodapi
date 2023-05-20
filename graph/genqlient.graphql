@@ -20,3 +20,10 @@ query getProducts( $limit: Int! $offset: Int! ){
         }
     }
 }
+
+query getBrands {
+    brands {
+        name
+        code
+    }
+}

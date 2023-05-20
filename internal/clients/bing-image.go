@@ -115,3 +115,26 @@ func (b BingImageClient) SearchTyreImage(searchString string) (*ImageResponse, e
 
 	return tyreRes, nil
 }
+
+func (b BingImageClient) SearchBrandImage(brandName string) (*ImageResponse, error) {
+	searchString := brandName + " tyre logo image"
+
+	params := map[string]string{
+		"count":      "1",
+		"q":          searchString,
+		"safeSearch": "Strict",
+		"aspect":     "Wide",
+		"size":       "Large",
+		"minWidth":   "400",
+		"imageType":  "Transparent",
+	}
+
+	brandRes := new(ImageResponse)
+
+	err := makeRequest[ImageResponse](b.endpoint+"v7.0/images/search", params, brandRes)
+	if err != nil {
+		return nil, err
+	}
+
+	return brandRes, nil
+}

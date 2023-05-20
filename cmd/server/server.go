@@ -20,8 +20,10 @@ func main() {
 	ctx := context.Background()
 	router := mux.NewRouter()
 
-	router.HandleFunc("/products/tyres_image/{tyre_code}", controllers.NewTyreController().FindImage).Methods(http.MethodGet)
 	router.HandleFunc("/products/tyres/{tyre_code}", controllers.NewTyreController().FindByCode).Methods(http.MethodGet)
+
+	router.HandleFunc("/resources/tyres/{tyre_code}", controllers.NewTyreController().FindImage).Methods(http.MethodGet)
+	router.HandleFunc("/resources/brands/{brand_code}", controllers.NewBrandController().FindImage).Methods(http.MethodGet)
 
 	fmt.Println("server started at " + viper.GetString(viper.GetString("APPLICATION_DOMAIN")))
 

@@ -20,6 +20,26 @@ func (v *__getProductsInput) GetLimit() int { return v.Limit }
 // GetOffset returns __getProductsInput.Offset, and is useful for accessing the field via an interface.
 func (v *__getProductsInput) GetOffset() int { return v.Offset }
 
+// getBrandsBrandsBrand includes the requested fields of the GraphQL type Brand.
+type getBrandsBrandsBrand struct {
+	Name string `json:"name"`
+	Code string `json:"code"`
+}
+
+// GetName returns getBrandsBrandsBrand.Name, and is useful for accessing the field via an interface.
+func (v *getBrandsBrandsBrand) GetName() string { return v.Name }
+
+// GetCode returns getBrandsBrandsBrand.Code, and is useful for accessing the field via an interface.
+func (v *getBrandsBrandsBrand) GetCode() string { return v.Code }
+
+// getBrandsResponse is returned by getBrands on success.
+type getBrandsResponse struct {
+	Brands []getBrandsBrandsBrand `json:"brands"`
+}
+
+// GetBrands returns getBrandsResponse.Brands, and is useful for accessing the field via an interface.
+func (v *getBrandsResponse) GetBrands() []getBrandsBrandsBrand { return v.Brands }
+
 // getProductsProductsProductPaginate includes the requested fields of the GraphQL type ProductPaginate.
 type getProductsProductsProductPaginate struct {
 	Pagination getProductsProductsProductPaginatePagination        `json:"pagination"`
@@ -118,15 +138,40 @@ type getProductsResponse struct {
 // GetProducts returns getProductsResponse.Products, and is useful for accessing the field via an interface.
 func (v *getProductsResponse) GetProducts() getProductsProductsProductPaginate { return v.Products }
 
-func getProducts(
+// The query or mutation executed by getBrands.
+const getBrands_Operation = `
+query getBrands {
+	brands {
+		name
+		code
+	}
+}
+`
+
+func getBrands(
 	ctx context.Context,
 	client graphql.Client,
-	limit int,
-	offset int,
-) (*getProductsResponse, error) {
+) (*getBrandsResponse, error) {
 	req := &graphql.Request{
-		OpName: "getProducts",
-		Query: `
+		OpName: "getBrands",
+		Query:  getBrands_Operation,
+	}
+	var err error
+
+	var data getBrandsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by getProducts.
+const getProducts_Operation = `
 query getProducts ($limit: Int!, $offset: Int!) {
 	products(pagination: {limit:$limit,offset:$offset}) {
 		pagination {
@@ -149,7 +194,17 @@ query getProducts ($limit: Int!, $offset: Int!) {
 		}
 	}
 }
-`,
+`
+
+func getProducts(
+	ctx context.Context,
+	client graphql.Client,
+	limit int,
+	offset int,
+) (*getProductsResponse, error) {
+	req := &graphql.Request{
+		OpName: "getProducts",
+		Query:  getProducts_Operation,
 		Variables: &__getProductsInput{
 			Limit:  limit,
 			Offset: offset,

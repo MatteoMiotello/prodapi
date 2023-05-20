@@ -8,6 +8,7 @@ type ProductCategory {
 type Brand {
     id: ID!
     name: String!
+    code: String!
     image_logo: String!
 }
 

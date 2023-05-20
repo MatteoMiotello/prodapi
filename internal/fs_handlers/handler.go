@@ -2,17 +2,25 @@ package fs_handlers
 
 import "strings"
 
-type ImagesHandler struct {
+type FsHandler struct {
 	baseUrl   string
 	basePath  string
 	publicUrl string
 }
 
-func NewImagesHandler(baseUrl string) *ImagesHandler {
-	return &ImagesHandler{
+func NewImagesHandler(baseUrl string) *FsHandler {
+	return &FsHandler{
 		baseUrl:   baseUrl,
 		basePath:  "images/tyres",
 		publicUrl: "resources/tyres",
+	}
+}
+
+func NewBrandsHandler(baseUrl string) *FsHandler {
+	return &FsHandler{
+		baseUrl:   baseUrl,
+		basePath:  "images/brands",
+		publicUrl: "resources/brands",
 	}
 }
 
@@ -30,22 +38,22 @@ func concat(paths ...string) string {
 	return strings.Join(cleaned, "/")
 }
 
-func (i ImagesHandler) GetRelativePath() string {
+func (i FsHandler) GetRelativePath() string {
 	return concat("./", i.basePath)
 }
 
-func (i ImagesHandler) GetFileRelativePath(fileName string) string {
+func (i FsHandler) GetFileRelativePath(fileName string) string {
 	return concat(i.GetRelativePath(), fileName)
 }
 
-func (i ImagesHandler) GetFileBaseRelativePath(fileName string) string {
+func (i FsHandler) GetFileBaseRelativePath(fileName string) string {
 	return concat("/", i.basePath, fileName)
 }
 
-func (i ImagesHandler) GetBaseUrl() string {
+func (i FsHandler) GetBaseUrl() string {
 	return concat(i.baseUrl, i.publicUrl)
 }
 
-func (i ImagesHandler) GetPublicUrl(filename string) string {
+func (i FsHandler) GetPublicUrl(filename string) string {
 	return concat(i.GetBaseUrl(), filename)
 }
