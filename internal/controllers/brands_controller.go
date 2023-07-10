@@ -7,6 +7,8 @@ import (
 	"github.com/MatteoMiotello/prodapi/schemas"
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 	"net/http"
 )
 
@@ -45,7 +47,7 @@ func (b BrandController) FindImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	brand, err := b.findBrandByProduct(r.Context(), productCode)
+	brand, err := b.findBrandByProduct(r.Context(), cases.Upper(language.Und).String(productCode))
 
 	if err != nil {
 		http.Error(w, "could not decode record: "+err.Error(), http.StatusNotFound)

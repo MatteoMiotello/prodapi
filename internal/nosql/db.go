@@ -6,6 +6,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+var dbName string
+
+func init() {
+	dbName = viper.GetString("MONGO_DB_NAME")
+}
+
 var Client *mongo.Client
 
 func InitClient(client *mongo.Client) {
@@ -18,10 +24,8 @@ func Disconnect() {
 	}
 }
 
-var dbName = viper.GetString("MONGO_DB_NAME")
-
 func TyreCollection() *mongo.Collection {
-	return Client.Database(dbName).Collection("tyres")
+	return Client.Database(viper.GetString("MONGO_DB_NAME")).Collection("tyres")
 }
 
 func BrandCollection() *mongo.Collection {
