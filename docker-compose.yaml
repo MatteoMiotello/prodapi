@@ -3,6 +3,8 @@ version: '3.8'
 services:
   prodapi-server:
     build: .
+    volumes:
+      - ./images:/app/images
     ports:
       - "8081:8081"
     depends_on:
