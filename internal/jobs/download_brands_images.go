@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/MatteoMiotello/prodapi/internal/clients"
 	"github.com/MatteoMiotello/prodapi/internal/fs_handlers"
-	"github.com/MatteoMiotello/prodapi/internal/images"
+	"github.com/MatteoMiotello/prodapi/internal/img"
 	"github.com/MatteoMiotello/prodapi/internal/nosql"
 	"github.com/MatteoMiotello/prodapi/schemas"
 	"github.com/spf13/viper"
@@ -87,7 +87,7 @@ func updateImage(ctx context.Context, res *clients.ImageResponse, brand *schemas
 	}
 
 	imageUrl := res.Value[index].ContentUrl
-	iService := images.NewImageService(fs_handlers.NewBrandsHandler(viper.GetString("APPLICATION_URL")))
+	iService := img.NewImageService(fs_handlers.NewBrandsHandler(viper.GetString("APPLICATION_URL")))
 
 	image, err := iService.SaveImageFromUrl(imageUrl, brand.Code)
 

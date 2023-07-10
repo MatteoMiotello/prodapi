@@ -11,7 +11,7 @@ type FsHandler struct {
 func NewImagesHandler(baseUrl string) *FsHandler {
 	return &FsHandler{
 		baseUrl:   baseUrl,
-		basePath:  "images/tyres",
+		basePath:  "img/tyres",
 		publicUrl: "resources/tyres",
 	}
 }
@@ -19,7 +19,7 @@ func NewImagesHandler(baseUrl string) *FsHandler {
 func NewBrandsHandler(baseUrl string) *FsHandler {
 	return &FsHandler{
 		baseUrl:   baseUrl,
-		basePath:  "images/brands",
+		basePath:  "img/brands",
 		publicUrl: "resources/brands",
 	}
 }

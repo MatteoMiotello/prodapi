@@ -108,7 +108,7 @@ func (b BingImageClient) SearchTyreImage(searchString string) (*ImageResponse, e
 
 	tyreRes := new(ImageResponse)
 
-	err := makeRequest[ImageResponse](b.endpoint+"v7.0/images/search", params, tyreRes)
+	err := makeRequest[ImageResponse](b.endpoint+"v7.0/img/search", params, tyreRes)
 	if err != nil {
 		return nil, err
 	}
@@ -131,7 +131,7 @@ func (b BingImageClient) SearchBrandImage(brandName string) (*ImageResponse, err
 
 	brandRes := new(ImageResponse)
 
-	err := makeRequest[ImageResponse](b.endpoint+"v7.0/images/search", params, brandRes)
+	err := makeRequest[ImageResponse](b.endpoint+"v7.0/img/search", params, brandRes)
 	if err != nil {
 		return nil, err
 	}

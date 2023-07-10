@@ -4,7 +4,7 @@ services:
   prodapi-server:
     build: .
     volumes:
-      - ./images:/app/images
+      - ./img:/app/img
     ports:
       - "8081:8081"
     depends_on:
