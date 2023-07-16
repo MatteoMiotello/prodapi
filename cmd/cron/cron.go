@@ -25,10 +25,10 @@ func main() {
 }
 
 func addJobs(c *cron.Cron) {
-	_, err := c.AddFunc("@every 1s", jobs.DownloadNextTyreImage)
-	if err != nil {
-		panic(err)
-	}
+	//_, err := c.AddFunc("@every 1s", jobs.DownloadNextTyreImage)
+	//if err != nil {
+	//	panic(err)
+	//}
 
 	_, err = c.AddFunc("@every 1s", jobs.DownloadNextBrandImage)
 
