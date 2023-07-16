@@ -120,16 +120,19 @@ func (b BingImageClient) SearchTyreImage(searchString string) (*ImageResponse, e
 func (b BingImageClient) SearchBrandImage(brandName string) (*ImageResponse, error) {
 	searchString := brandName + " tyre logo"
 
+	fmt.Println(searchString)
+
 	params := map[string]string{
-		"q":      searchString,
-		"aspect": "Wide",
-		"size":   "Large",
+		"q":        searchString,
+		"aspect":   "Wide",
+		"size":     "Large",
+		"minWidth": "400",
 	}
 
 	brandRes := new(ImageResponse)
 
 	err := makeRequest[ImageResponse](b.endpoint+"v7.0/img/search", params, brandRes)
-	fmt.Println(*brandRes)
+	fmt.Println(brandRes)
 	if err != nil {
 		return nil, err
 	}
