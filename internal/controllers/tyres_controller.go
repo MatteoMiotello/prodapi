@@ -21,14 +21,11 @@ func NewTyreController() *tyreController {
 }
 
 func (receiver *tyreController) findTyreByProductCode(ctx context.Context, productCode string) (error, *schemas.Tyre) {
-	filter := bson.D{
-		{"$and",
-			bson.A{
-				bson.D{{"code", bson.D{{"$eq", "CONTINENTAL"}}}},
-				bson.D{{"incomplete", bson.D{{"$ne", true}}}},
-			},
-		},
-	}
+	filter := bson.D{{
+		"code", bson.D{{
+			"$eq", productCode,
+		}},
+	}}
 
 	var tyre schemas.Tyre
 

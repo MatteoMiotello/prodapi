@@ -20,11 +20,14 @@ func NewBrandController() *BrandController {
 }
 
 func (b BrandController) findBrandByProduct(ctx context.Context, brandCode string) (*schemas.Brand, error) {
-	filter := bson.D{{
-		"code", bson.D{{
-			"$eq", brandCode,
-		}},
-	}}
+	filter := bson.D{
+		{"$and",
+			bson.A{
+				bson.D{{"code", bson.D{{"$eq", brandCode}}}},
+				bson.D{{"incomplete", bson.D{{"$ne", true}}}},
+			},
+		},
+	}
 
 	brand := new(schemas.Brand)
 
