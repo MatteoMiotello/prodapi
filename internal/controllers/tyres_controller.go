@@ -25,7 +25,7 @@ func (receiver *tyreController) findTyreByProductCode(ctx context.Context, produ
 		{"$and",
 			bson.A{
 				bson.D{{"code", bson.D{{"$eq", "CONTINENTAL"}}}},
-				bson.D{{"incomplete", bson.D{{"$ne", false}}}},
+				bson.D{{"incomplete", bson.D{{"$ne", true}}}},
 			},
 		},
 	}
