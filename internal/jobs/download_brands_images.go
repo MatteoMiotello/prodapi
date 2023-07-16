@@ -21,7 +21,6 @@ func DownloadNextBrandImage() {
 			bson.A{
 				bson.D{{"image_path", bson.D{{"$exists", false}}}},
 				bson.D{{"retry_image", bson.D{{"$eq", true}}}},
-				bson.D{{"incomplete", bson.D{{"$eq", false}}}},
 			},
 		},
 	}
