@@ -11,6 +11,7 @@ import (
 	"github.com/MatteoMiotello/prodapi/schemas"
 	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/bson"
+	"strings"
 )
 
 func DownloadNextBrandImage() {
@@ -27,7 +28,8 @@ func DownloadNextBrandImage() {
 
 	brand := new(schemas.Brand)
 	err := nosql.BrandCollection().FindOne(ctx, filter).Decode(&brand)
-	if err != nil {
+
+	if err != nil && !strings.Contains(err.Error(), "no documents in result") {
 		panic(err)
 	}
 
