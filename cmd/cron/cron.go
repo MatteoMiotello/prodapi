@@ -30,7 +30,7 @@ func addJobs(c *cron.Cron) {
 	//	panic(err)
 	//}
 
-	_, err = c.AddFunc("@every 1s", jobs.DownloadNextBrandImage)
+	_, err := c.AddFunc("@every 1s", jobs.DownloadNextBrandImage)
 
 	if err != nil {
 		panic(err)
