@@ -117,7 +117,7 @@ func (b BingImageClient) SearchTyreImage(searchString string) (*ImageResponse, e
 }
 
 func (b BingImageClient) SearchBrandImage(brandName string) (*ImageResponse, error) {
-	searchString := brandName + " tyre logo image"
+	searchString := brandName + " tyre logo"
 
 	params := map[string]string{
 		"count":      "1",
@@ -126,7 +126,6 @@ func (b BingImageClient) SearchBrandImage(brandName string) (*ImageResponse, err
 		"aspect":     "Wide",
 		"size":       "Large",
 		"minWidth":   "400",
-		"imageType":  "Transparent",
 	}
 
 	brandRes := new(ImageResponse)
