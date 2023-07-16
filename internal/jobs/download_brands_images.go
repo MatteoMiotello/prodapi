@@ -29,7 +29,7 @@ func DownloadNextBrandImage() {
 	brand := new(schemas.Brand)
 	err := nosql.BrandCollection().FindOne(ctx, filter).Decode(&brand)
 
-	if strings.Contains(err.Error(), "no documents in result") {
+	if err != nil && strings.Contains(err.Error(), "no documents in result") {
 		return
 	}
 
