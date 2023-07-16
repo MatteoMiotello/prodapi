@@ -103,7 +103,7 @@ func updateImage(ctx context.Context, res *clients.ImageResponse, brand *schemas
 	brand.ImagePath = image.Path
 	brand.ImageExtension = image.Extension
 	brand.ImageIndex = index
-	brand.RetryImage = true
+	brand.RetryImage = false
 	brand.Incomplete = false
 
 	fmt.Println(brand)
