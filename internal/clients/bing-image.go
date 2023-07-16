@@ -3,6 +3,7 @@ package clients
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/spf13/viper"
 	"net/http"
 	"net/url"
@@ -131,6 +132,7 @@ func (b BingImageClient) SearchBrandImage(brandName string) (*ImageResponse, err
 	brandRes := new(ImageResponse)
 
 	err := makeRequest[ImageResponse](b.endpoint+"v7.0/img/search", params, brandRes)
+	fmt.Println(*brandRes)
 	if err != nil {
 		return nil, err
 	}
