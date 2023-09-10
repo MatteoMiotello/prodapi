@@ -24,7 +24,6 @@ func (b BrandController) findBrandByProduct(ctx context.Context, brandCode strin
 		{"$and",
 			bson.A{
 				bson.D{{"code", bson.D{{"$eq", brandCode}}}},
-				bson.D{{"incomplete", bson.D{{"$ne", true}}}},
 			},
 		},
 	}
